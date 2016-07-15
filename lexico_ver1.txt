@@ -1,0 +1,28 @@
+%{
+	#include "sintaxis_ver1.tab.h"
+%}
+
+%%
+
+"print"					return print;
+";"						return yytext[0];
+"+"						return yytext[0];
+"-"						return yytext[0];
+"*"						return yytext[0];
+"/"						return yytext[0];
+"("						return yytext[0];
+")"						return yytext[0];
+[0-9]+\.[0-9]+			{yylval.floatnum = atof(yytext); return FLOAT;}
+[0-9]+					{yylval.integer = atoi(yytext); return CTE_INT;}
+['].[']					{yylval.charac = strdup(yytext); return CTE_CHAR;}
+["][^"]*["]				{yylval.string = strdup(yytext); return STRING;}
+[a-zA-Z][_a-zA-Z0-9]*	{yylval.id = strdup(yytext); return ID;}
+[ \t\n]					;
+.						{ECHO; yyerror("ERROR\n");}
+
+%%
+
+int yywrap()
+{
+	return 1;
+}
